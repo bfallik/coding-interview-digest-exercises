@@ -12,7 +12,7 @@ type pair struct {
 type FreqHeap []pair
 
 func (h FreqHeap) Len() int           { return len(h) }
-func (h FreqHeap) Less(i, j int) bool { return h[i].count > h[j].count }
+func (h FreqHeap) Less(i, j int) bool { return h[i].count < h[j].count }
 func (h FreqHeap) Swap(i, j int)      { h[i], h[j] = h[j], h[i] }
 
 func (h *FreqHeap) Push(x any) {
@@ -34,14 +34,17 @@ func Solve(ns []int, k int) []int {
 	}
 
 	h := FreqHeap{}
-	for k, v := range counts {
-		h = append(h, pair{k, v})
-	}
 	heap.Init(&h)
+	for k, v := range counts {
+		if len(h) == k {
+			heap.Pop(&h)
+		}
+		heap.Push(&h, pair{k, v})
+	}
 
 	res := []int{}
 	for i := 0; i < k; i++ {
-		res = append(res, h[i].n)
+		res = append(res, heap.Pop(&h).(pair).n)
 	}
 
 	return res

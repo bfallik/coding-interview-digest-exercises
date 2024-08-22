@@ -36,6 +36,7 @@ func TestSolve(t *testing.T) {
 	for _, tt := range tabletests {
 		t.Run(tt.input.name, func(t *testing.T) {
 			output := Solve(tt.input.ns, tt.input.k)
+			slices.Sort(output)
 			if !slices.Equal(output, tt.output) {
 				t.Errorf("Expected %v, got %v", tt.output, output)
 			}
